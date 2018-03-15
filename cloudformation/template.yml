@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: Sample CloudFormation Template.
+
+Resources:
+  UserTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "user_id"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "user_id"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "5"
+        WriteCapacityUnits: "5"
+
+  HomeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: homepage.handler
+      Runtime: nodejs6.10
+      CodeUri: ../build
+      Timeout: 5
+      Events:
+        OAuthDemoAPI:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+
+  DemoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: demo_action.handler
+      Runtime: nodejs6.10
+      CodeUri: ../build
+      Timeout: 30
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref UserTable
+      Events:
+        OAuthDemoAPI:
+          Type: Api
+          Properties:
+            Path: /demo
+            Method: GET
+      Policies:
+        - 
+          DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+
+
+
+
+

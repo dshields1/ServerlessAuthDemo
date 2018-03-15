@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Entered the install phase...
+      - echo Nothing to install...
+  pre_build:
+    commands:
+      - echo Entered the pre_build phase...
+      - npm install
+  build:
+    commands:
+      - echo Entered the build phase...
+      - echo Build started on `date`
+      - npm run compile
+      - rm -r node_modules/
+      - npm install --only=production
+      - npm run copy-dependencies
+  post_build:
+    commands:
+      - echo Entered the post_build phase...
+      - aws cloudformation package --template-file cloudformation/template.yml --s3-bucket serverlessoauthdemo-deployment-bucket --output-template-file template.yml
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - 'template.yml'
+  discard-paths: yes

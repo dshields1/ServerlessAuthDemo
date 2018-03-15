@@ -1,0 +1,19 @@
+{
+  "name": "blueprint",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "compile": "./node_modules/.bin/tsc",
+    "copy-dependencies": "cp -r node_modules/ build/node_modules",
+    "clean": "rm -r build/ && rm -r node_modules/"
+  },
+  "devDependencies": {
+    "@types/node": "^9.4.7",
+    "aws-sdk": "^2.202.0",
+    "typescript": "^2.7.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.5",
+    "node-fetch": "^2.1.1"
+  }
+}
